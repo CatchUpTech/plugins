@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
@@ -18,6 +19,7 @@ import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
@@ -75,10 +77,10 @@ final class VideoPlayer {
     this.textureEntry = textureEntry;
     this.options = options;
 
-     RenderersFactory renderersFactory = new DefaultRenderersFactory(context);
-     TrackSelector trackSelector = new DefaultTrackSelector();
+     //RenderersFactory renderersFactory = new DefaultRenderersFactory(context);
+     TrackSelector trackSelector = new DefaultTrackSelector(context);
 
-      DefaultLoadControl.Builder loadControlBuilder =new DefaultLoadControl.Builder() ;
+      DefaultLoadControl.Builder loadControlBuilder = new DefaultLoadControl.Builder() ;
 
       loadControlBuilder
                   .setBufferDurationsMs(6000, 50000, 2500, 5000);
@@ -86,9 +88,16 @@ final class VideoPlayer {
       //loadControlBuilder
         //          .setBackBuffer(backBufferDurationMs,retainBackBufferFromKeyframe);
 
-      DefaultLoadControl defaultLoadControl = loadControlBuilder.createDefaultLoadControl();
+     // DefaultLoadControl defaultLoadControl = loadControlBuilder.build();
+    LoadControl loadControl =  loadControlBuilder.build();
 
-      exoPlayer = ExoPlayerFactory.newSimpleInstance(context,renderersFactory, trackSelector,defaultLoadControl);
+
+    SimpleExoPlayer.Builder builder = new SimpleExoPlayer.Builder(context);
+    builder.setTrackSelector(trackSelector);
+    builder.setLoadControl(loadControl);
+    exoPlayer = builder.build();
+
+    //exoPlayer = ExoPlayerFactory.newSimpleInstance(context,renderersFactory, trackSelector, loadControl);
 
     Uri uri = Uri.parse(dataSource);
 
