@@ -36,6 +36,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.RenderersFactory;
+
+
 final class VideoPlayer {
   private static final String FORMAT_SS = "ss";
   private static final String FORMAT_DASH = "dash";
@@ -67,7 +72,20 @@ final class VideoPlayer {
     this.textureEntry = textureEntry;
     this.options = options;
 
-    exoPlayer = new SimpleExoPlayer.Builder(context).build();
+     RenderersFactory renderersFactory = new DefaultRenderersFactory(context);
+     TrackSelector trackSelector = new DefaultTrackSelector();
+
+      DefaultLoadControl.Builder loadControlBuilder =new DefaultLoadControl.Builder() ;
+
+      loadControlBuilder
+                  .setBufferDurationsMs(6000, 50000, 2500, 5000);
+      //loadControlBuilder.setTargetBufferBytes(targetBufferBytes);
+      //loadControlBuilder
+        //          .setBackBuffer(backBufferDurationMs,retainBackBufferFromKeyframe);
+
+      DefaultLoadControl defaultLoadControl = loadControlBuilder.createDefaultLoadControl();
+
+      exoPlayer = ExoPlayerFactory.newSimpleInstance(context,renderersFactory, trackSelector,defaultLoadControl);
 
     Uri uri = Uri.parse(dataSource);
 
