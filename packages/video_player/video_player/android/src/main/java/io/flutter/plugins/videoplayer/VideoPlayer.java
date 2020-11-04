@@ -81,6 +81,7 @@ final class VideoPlayer {
 
       DefaultLoadControl.Builder loadControlBuilder = new DefaultLoadControl.Builder() ;
 
+    
       loadControlBuilder
                   .setBufferDurationsMs(6000, 50000, 2500, 5000);
       //loadControlBuilder.setTargetBufferBytes(targetBufferBytes);
