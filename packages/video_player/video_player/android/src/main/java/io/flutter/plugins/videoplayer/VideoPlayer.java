@@ -83,7 +83,7 @@ final class VideoPlayer {
 
     
       loadControlBuilder
-                  .setBufferDurationsMs(6000, 50000, 2500, 5000);
+                  .setBufferDurationsMs(15000, 50000, 15000, 15000);
       //loadControlBuilder.setTargetBufferBytes(targetBufferBytes);
       //loadControlBuilder
         //          .setBackBuffer(backBufferDurationMs,retainBackBufferFromKeyframe);
